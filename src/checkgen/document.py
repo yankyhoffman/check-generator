@@ -1,4 +1,7 @@
 import fpdf
+from pathlib import Path
+
+FONTS = Path(__file__).absolute().parent / 'assets' / 'fonts'
 
 
 class Document(fpdf.FPDF):
@@ -12,10 +15,10 @@ class Document(fpdf.FPDF):
         self.set_margin(0)
 
         # add fonts
-        self.add_font('regular', style='', fname='assets/fonts/OpenSans-Regular.ttf')
-        self.add_font('handwriting', style='', fname='assets/fonts/Cookie-Regular.ttf')
-        self.add_font('check', style='', fname='assets/fonts/micrenc.ttf')
-        self.add_font('metadata', style='', fname='assets/fonts/TitilliumWeb-Regular.ttf')
+        self.add_font('regular', style='', fname=str(FONTS / 'OpenSans-Regular.ttf'))
+        self.add_font('handwriting', style='', fname=str(FONTS / 'Cookie-Regular.ttf'))
+        self.add_font('check', style='', fname=str(FONTS / 'micrenc.ttf'))
+        self.add_font('metadata', style='', fname=str(FONTS / 'TitilliumWeb-Regular.ttf'))
 
         # define line style
         self.set_line_width(0.001)

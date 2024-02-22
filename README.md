@@ -7,8 +7,8 @@ Sample usage
 ```python
 from datetime import datetime
 
-from checkprint.models import Issuer, Bank
-from checkprint.printer import Printer
+from checkgen.models import Issuer, Bank
+from checkgen.printer import Printer
 
 issuer = Issuer('Samantha Johnson', '123 Main Street', Bank('Lakeside National Bank', '123456789'), '98765432101')
 printer = Printer(issuer)

@@ -2,8 +2,8 @@ import enum
 import math
 from datetime import datetime, timedelta
 
-from models import Payment
-from document import Check, Document
+from checkgen.models import Payment
+from checkgen.document import Check, Document
 
 
 class Period(enum.Enum):
