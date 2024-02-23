@@ -1,4 +1,4 @@
-# checkprint
+# checkgen
 
 Print checks on 3 checks per page in bulk.
 
