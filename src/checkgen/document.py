@@ -5,7 +5,6 @@ FONTS = Path(__file__).absolute().parent / 'assets' / 'fonts'
 
 
 class Document(fpdf.FPDF):
-
     def __init__(self):
         super().__init__(unit='in', format='Letter')
 
