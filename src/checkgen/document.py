@@ -53,7 +53,7 @@ class Document(fpdf.FPDF):
         self.set_stretching(100.0)
 
     def set_offset(self, offset):
-        self._offset = offset * (11.2 / 3)
+        self._offset = offset * (11 / 3)
 
     def set_position(self, left, top):
         super().set_xy(x=left, y=top + self._offset)
