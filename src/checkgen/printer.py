@@ -69,12 +69,13 @@ class Printer:
             else:
                 self._payments.append(Payment(payee, remainder, date, memo))
 
-    def print(self, *, empty_checks=EmptyChecks.PRINT, type=PrintType.MICR | PrintType.LABELS | PrintType.INFORMATION):
-        num_checks = math.ceil(len(self._payments) / 3) * 3 \
+    def print(self, *, empty_checks=EmptyChecks.PRINT, type=PrintType.MICR | PrintType.LABELS | PrintType.INFORMATION,
+              target_num_checks=0):
+        num_checks = math.ceil(max(len(self._payments), target_num_checks) / 3) * 3 \
             if empty_checks is EmptyChecks.PRINT \
             else len(self._payments)
 
-        book = Book(self.issuer, num_checks, self.starting_check_number)
+        book = Book(self.issuer, max(num_checks, target_num_checks), self.starting_check_number)
 
         report = book.print(self._payments, type=type)
 
