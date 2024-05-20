@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 import fpdf
 from pathlib import Path
 
@@ -70,6 +72,11 @@ class Document(fpdf.FPDF):
         self.horizontal_line(left=left, top=top + height, width=width)
         self.vertical_line(left=left, top=top, height=height)
         self.vertical_line(left=left + width, top=top, height=height)
+
+    @contextmanager
+    def use_rotation(self, angle, *, left, top):
+        with self.rotation(angle, x=left, y=top + self._offset):
+            yield
 
 
 class Check:
@@ -174,3 +181,11 @@ class Check:
             document.set_position(left=0.875, top=2.3)
             document.use_regular_font(10)
             document.print_cell(payment.memo, width=2, height=0.25)
+
+    def mark_as_void(self, document):
+        top = 2
+        for left in [2, 4]:
+            with document.use_rotation(45, left=left, top=top):
+                document.set_position(left=left, top=top)
+                document.use_metadata_font(20)
+                document.print_cell('VOID VOID VOID', width=3, height=0.5)

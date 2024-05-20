@@ -70,14 +70,14 @@ class Printer:
                 self._payments.append(Payment(payee, remainder, date, memo))
 
     def print(self, *, empty_checks=EmptyChecks.PRINT, type=PrintType.MICR | PrintType.LABELS | PrintType.INFORMATION,
-              target_num_checks=0):
+              target_num_checks=0, void=False):
         num_checks = math.ceil(max(len(self._payments), target_num_checks) / 3) * 3 \
             if empty_checks is EmptyChecks.PRINT \
             else len(self._payments)
 
         book = Book(self.issuer, max(num_checks, target_num_checks), self.starting_check_number)
 
-        report = book.print(self._payments, type=type)
+        report = book.print(self._payments, type=type, void=void)
 
         return book, report
 
@@ -90,7 +90,7 @@ class Book:
         for i in range(num_checks):
             self.checks.append(Check(issuer, starting_check_number + i))
 
-    def print(self, payments=None, *, type=PrintType.MICR | PrintType.LABELS | PrintType.INFORMATION):
+    def print(self, payments=None, *, type=PrintType.MICR | PrintType.LABELS | PrintType.INFORMATION, void=False):
         report = []
 
         for i, check in enumerate(self.checks):
@@ -109,6 +109,9 @@ class Book:
 
             if PrintType.INFORMATION in type:
                 check.print_check_information(self.document)
+
+            if void:
+                check.mark_as_void(self.document)
 
             if payments and i < len(payments):
                 payment = payments[i]
