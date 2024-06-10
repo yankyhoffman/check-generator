@@ -1,5 +1,6 @@
 import enum
 import math
+from calendar import monthrange
 from datetime import datetime, timedelta
 
 from checkgen.models import Payment
@@ -11,12 +12,14 @@ class Period(enum.Enum):
     BIWEEKLY = enum.auto()
     MONTHLY = enum.auto()
 
-    def increment(self, date):
+    def increment(self, date, latest_day=31):
         if self is self.MONTHLY:
             month = date.month + 1 if date.month < 12 else 1
             year = date.year + 1 if month == 1 else date.year
 
-            return datetime(year, month, date.day)
+            _, days_in_month = monthrange(year, month)
+
+            return datetime(year, month, min(latest_day, days_in_month))
 
         if self is self.WEEKLY:
             return date + timedelta(days=7)
@@ -50,7 +53,7 @@ class Printer:
         for _ in range(count):
             self._payments.append(Payment(payee, check_amount, date, memo))
 
-            date = payment_period.increment(date)
+            date = payment_period.increment(date, latest_day=start_date.day)
 
     def distribute_payment(self, payee, total_amount, check_amount, start_date, memo=None,
                            *, payment_period=Period.MONTHLY, fold_last_payment=False):
@@ -61,7 +64,7 @@ class Printer:
         for _ in range(payments):
             self._payments.append(Payment(payee, check_amount, date, memo))
 
-            date = payment_period.increment(date)
+            date = payment_period.increment(date, latest_day=start_date.day)
 
         if remainder:
             if fold_last_payment and payments:
