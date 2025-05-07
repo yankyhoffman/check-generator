@@ -17,10 +17,19 @@ class Issuer:
         self.details = details
         self.bank = bank
         self.account_number = account_number
+        # , next_check_number: int = 1001
+        # self._next_check_number = next_check_number
+
+    # def get_next_check_number(self):
+    #     current = self._next_check_number
+    #
+    #     self._next_check_number += 1
+    #
+    #     return current
 
 
 class Payment:
-    def __init__(self, payee: str, amount: float | Decimal, date: datetime | date, memo=None) -> None:
+    def __init__(self, payee: str, amount: float | Decimal, date: date | datetime, memo=None) -> None:
         self.payee = payee
         self._amount = amount
         self._date = date

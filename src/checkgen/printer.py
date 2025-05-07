@@ -1,7 +1,7 @@
 import enum
 import math
 from calendar import monthrange
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 from checkgen.models import Payment
 from checkgen.document import Check, Document
@@ -12,7 +12,7 @@ class Period(enum.Enum):
     BIWEEKLY = enum.auto()
     MONTHLY = enum.auto()
 
-    def increment(self, date, latest_day=31):
+    def increment(self, date: date | datetime, latest_day=31) -> datetime:
         if self is self.MONTHLY:
             month = date.month + 1 if date.month < 12 else 1
             year = date.year + 1 if month == 1 else date.year
@@ -26,6 +26,9 @@ class Period(enum.Enum):
 
         if self is self.BIWEEKLY:
             return date + timedelta(days=14)
+
+        # all options should be exhausted here, raise an exception if a new unhandled branch was added.
+        raise ValueError(f"Unhandled option: {self.value}")
 
 
 class EmptyChecks(enum.Enum):
