@@ -155,7 +155,8 @@ class Check:
         document.use_regular_font(12)
         document.print_cell(str(self.check_number), width=1, height=0.25)
 
-    def fill_check(self, document, payment):
+    @staticmethod
+    def fill_check(document, payment):
         # payee
         document.set_position(left=0.875, top=1.2)
         document.use_regular_font(12)
@@ -182,7 +183,8 @@ class Check:
             document.use_regular_font(10)
             document.print_cell(payment.memo, width=2, height=0.25)
 
-    def mark_as_void(self, document):
+    @staticmethod
+    def mark_as_void(document):
         top = 2
         for left in [2, 4]:
             with document.use_rotation(45, left=left, top=top):
